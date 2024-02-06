@@ -35,3 +35,16 @@ app.get('/test', (req, res) => {
 //Chaque fois que quelqu'un ira sur la route /api/user, il va checker toutes les routes de userRouter. Et la première d'entre elles est /test. Pour avoir le message, il faudra donc mettre le chemin api/user/test dans l'url.
 app.use("/api/user", userRouter)
 app.use('/api/auth', authRouter)
+
+app.use((err, req, res, next ) => {
+    const statusCode =  err.statusCode || 500
+    const message = err.message || 'Internal server Error'
+    return res.status(statusCode).json({
+        success: false,
+        statusCode,
+        message,
+    })
+    //status code vient de l'input du middleware. S'il n'y a pas d'erreur de statusCode, utiliser 500.
+}) 
+
+//err est erreur qui vient de l'input du middleware, que nous envoyons vers la requête du middleware. req est la données venant du navigateur, res: la réponse du serveur vers le client, next pour aller au prochain middleware
