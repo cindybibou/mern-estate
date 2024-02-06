@@ -2,6 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import userRouter from './routes/user.route.js'
+import authRouter from './routes/auth.route.js'
 dotenv.config()
 
 mongoose
@@ -14,6 +15,8 @@ mongoose
     })
 
 const app = express()
+
+app.use(express.json())
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000!')
@@ -31,3 +34,4 @@ app.get('/test', (req, res) => {
 
 //Chaque fois que quelqu'un ira sur la route /api/user, il va checker toutes les routes de userRouter. Et la première d'entre elles est /test. Pour avoir le message, il faudra donc mettre le chemin api/user/test dans l'url.
 app.use("/api/user", userRouter)
+app.use('/api/auth', authRouter)
